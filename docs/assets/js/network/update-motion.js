@@ -29,9 +29,10 @@ function moveWithinBoundary(node, positionKey, velocityKey, boundary, deltaSecon
  * @returns {void}
  */
 export function updateNodeMotion(nodes, bounds, deltaSeconds) {
-  nodes.forEach((node) => {
+  for (let index = 0; index < nodes.length; index += 1) {
+    const node = nodes[index];
     moveWithinBoundary(node, "x", "vx", bounds.x, deltaSeconds);
     moveWithinBoundary(node, "y", "vy", bounds.y, deltaSeconds);
     moveWithinBoundary(node, "z", "vz", bounds.z, deltaSeconds);
-  });
+  }
 }

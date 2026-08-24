@@ -38,7 +38,8 @@ export function infectNode(node, time, random, config) {
  * @returns {void}
  */
 export function updateNodeStates(nodes, time, random, config) {
-  nodes.forEach((node) => {
+  for (let index = 0; index < nodes.length; index += 1) {
+    const node = nodes[index];
     if (node.state === "infected" && time >= node.stateUntil) {
       node.state = "recovering";
       node.stateStarted = time;
@@ -54,7 +55,7 @@ export function updateNodeStates(nodes, time, random, config) {
       node.stateUntil = 0;
       node.transitionDuration = 0;
     }
-  });
+  }
 }
 
 /**
@@ -112,7 +113,8 @@ export function infectEdge(edge, time, random, config) {
  * @returns {void}
  */
 export function updateEdgeStates(edges, time) {
-  edges.forEach((edge) => {
+  for (let index = 0; index < edges.length; index += 1) {
+    const edge = edges[index];
     if (edge.state === "infected" && time >= edge.stateUntil) {
       edge.state = "healthy";
       edge.progress = 0;
@@ -120,5 +122,5 @@ export function updateEdgeStates(edges, time) {
       edge.recoveryStarted = 0;
       edge.stateUntil = 0;
     }
-  });
+  }
 }

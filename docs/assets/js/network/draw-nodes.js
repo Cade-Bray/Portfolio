@@ -51,9 +51,10 @@ function drawInfectedNode(context, node, strength) {
 export function drawNodes(context, nodes, projectedNodes, nodeColor, dangerColor, time) {
   context.save();
 
-  projectedNodes.forEach((projectedNode, index) => {
+  for (let index = 0; index < projectedNodes.length; index += 1) {
+    const projectedNode = projectedNodes[index];
     if (!projectedNode.visible) {
-      return;
+      continue;
     }
 
     context.fillStyle = nodeColor;
@@ -67,7 +68,7 @@ export function drawNodes(context, nodes, projectedNodes, nodeColor, dangerColor
       context.shadowColor = dangerColor;
       drawInfectedNode(context, projectedNode, strength);
     }
-  });
+  }
 
   context.restore();
 }

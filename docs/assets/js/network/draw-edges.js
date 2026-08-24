@@ -1,5 +1,8 @@
 import { getEdgeInfectionLevel } from "./infection-levels.js";
 
+const INFECTED_DASH = Object.freeze([5, 4]);
+const SOLID_DASH = Object.freeze([]);
+
 /**
  * Draws the white resting connection for one edge.
  *
@@ -51,12 +54,12 @@ function drawTransmission(context, source, target, progress) {
 function drawInfectedEdge(context, source, target, strength) {
   context.globalAlpha *= strength;
   context.lineWidth = 1.35 + strength;
-  context.setLineDash([5, 4]);
+  context.setLineDash(INFECTED_DASH);
   context.beginPath();
   context.moveTo(source.x, source.y);
   context.lineTo(target.x, target.y);
   context.stroke();
-  context.setLineDash([]);
+  context.setLineDash(SOLID_DASH);
 }
 
 /**
@@ -74,18 +77,19 @@ export function drawEdges(context, edges, projectedNodes, lineColor, dangerColor
   context.save();
   context.lineCap = "round";
 
-  edges.forEach((edge) => {
+  for (let index = 0; index < edges.length; index += 1) {
+    const edge = edges[index];
     const source = projectedNodes[edge.sourceId];
     const target = projectedNodes[edge.targetId];
 
     if (!source.visible && !target.visible) {
-      return;
+      continue;
     }
 
     context.strokeStyle = lineColor;
     drawBaseEdge(context, source, target);
     if (edge.state === "healthy") {
-      return;
+      continue;
     }
 
     context.strokeStyle = dangerColor;
@@ -95,7 +99,7 @@ export function drawEdges(context, edges, projectedNodes, lineColor, dangerColor
     } else {
       drawInfectedEdge(context, source, target, getEdgeInfectionLevel(edge, time));
     }
-  });
+  }
 
   context.restore();
 }

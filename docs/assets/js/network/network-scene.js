@@ -6,7 +6,7 @@ import { createNodes } from "./create-nodes.js";
 import { drawEdges } from "./draw-edges.js";
 import { drawNodes } from "./draw-nodes.js";
 import { createInfectionEngine, updateInfection } from "./infection-engine.js";
-import { projectNode } from "./project-node.js";
+import { prepareProjectionFrame, projectNodeInto } from "./project-node.js";
 import { updateNodeMotion } from "./update-motion.js";
 
 /**
@@ -45,6 +45,7 @@ export function initializeNetworkScene(hero, canvas) {
   let edges = [];
   let infectionEngine;
   let projectedNodes = [];
+  const projectionFrame = {};
   let viewport = { width: 0, height: 0, pixelRatio: 1 };
   let nodeCount = 0;
   let animationFrame = 0;
@@ -57,6 +58,7 @@ export function initializeNetworkScene(hero, canvas) {
     const random = createSeededRandom(sceneSeed + nodeCount);
     nodes = createNodes(nodeCount, NETWORK_CONFIG.bounds, random);
     edges = createEdges(nodes, NETWORK_CONFIG.maximumDegree, NETWORK_CONFIG.extraEdgeRatio);
+    projectedNodes = Array.from({ length: nodeCount }, () => ({ visible: false }));
     infectionEngine = createInfectionEngine(
       nodes,
       edges,
@@ -103,9 +105,16 @@ export function initializeNetworkScene(hero, canvas) {
     }
     updateInfection(infectionEngine, time);
 
-    projectedNodes = nodes.map((node) => (
-      projectNode(node, camera, viewport, NETWORK_CONFIG.bounds)
-    ));
+    prepareProjectionFrame(projectionFrame, camera, viewport, NETWORK_CONFIG.bounds);
+    for (let index = 0; index < nodes.length; index += 1) {
+      projectNodeInto(
+        nodes[index],
+        camera,
+        projectionFrame,
+        NETWORK_CONFIG.bounds,
+        projectedNodes[index],
+      );
+    }
     context.clearRect(0, 0, viewport.width, viewport.height);
     drawEdges(context, edges, projectedNodes, colors.line, colors.danger, time);
     drawNodes(context, nodes, projectedNodes, colors.node, colors.danger, time);
