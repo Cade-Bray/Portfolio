@@ -27,9 +27,9 @@
   position: absolute;
   inset-block-start: 21%;
   inset-inline-end: 0;
-  color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.32);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: clamp(0.76rem, 1.2vw, 0.9rem);
   letter-spacing: 0.18em;
   writing-mode: vertical-rl;
 }
