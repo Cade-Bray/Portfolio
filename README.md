@@ -4,9 +4,9 @@ A dependency-free cybersecurity portfolio combining a software engineering found
 
 ## Status
 
-Phases 0 and 1 are complete. The Phase 2 decorative Canvas 2D network is implemented and ready for owner visual testing.
+Phases 0 through 2 are complete. The Phase 3 ambient infection system is implemented and ready for owner visual testing.
 
-The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Infection and pointer-outbreak behavior remain deferred to later phases.
+The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Ambient infections now propagate through connected edges and recover automatically. Pointer-driven outbreaks remain deferred to Phase 4.
 
 ## Technology
 
@@ -60,6 +60,8 @@ A local web server is required because the browser loads the JavaScript as nativ
 - Responsive header with direct access to Projects, GitHub, and LinkedIn
 - Hero, focus areas, selected projects, community timeline, about, and contact sections
 - Connected perspective network with responsive node counts and calm three-dimensional drift
+- Fresh randomized node placement on each page load
+- Bounded ambient infections with connected edge pulses and automatic recovery
 - Automatic animation pausing when the hero or browser tab is not visible
 - Verified project summaries based on the linked public repositories
 - Custom 404 page using the same visual language
@@ -67,7 +69,7 @@ A local web server is required because the browser loads the JavaScript as nativ
 
 ## Accessibility
 
-The site includes semantic landmarks, a visible-on-focus skip link, ordered headings, visible keyboard focus styles, descriptive link text, touch-sized navigation targets, and reduced-motion-safe behavior. The decorative canvas freezes to a static, lower-density graph when reduced motion is requested. All meaningful content remains in the HTML and is available if JavaScript is disabled.
+The site includes semantic landmarks, a visible-on-focus skip link, ordered headings, visible keyboard focus styles, descriptive link text, touch-sized navigation targets, and reduced-motion-safe behavior. Infections change node size, halo, edge thickness, and line pattern in addition to color. The decorative canvas freezes to one static, lower-density red path when reduced motion is requested. All meaningful content remains in the HTML and is available if JavaScript is disabled.
 
 Final keyboard, screen-size, and visual checks remain the owner's responsibility before publishing.
 

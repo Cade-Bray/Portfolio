@@ -1,23 +1,25 @@
 import { getNetworkNodeCount, NETWORK_CONFIG } from "../config/network-config.js";
-import { createSeededRandom } from "../utilities/random.js";
+import { createRandomSeed, createSeededRandom } from "../utilities/random.js";
 import { resizeCanvasToDisplaySize } from "../utilities/viewport.js";
 import { createEdges } from "./create-edges.js";
 import { createNodes } from "./create-nodes.js";
 import { drawEdges } from "./draw-edges.js";
 import { drawNodes } from "./draw-nodes.js";
+import { createInfectionEngine, updateInfection } from "./infection-engine.js";
 import { projectNode } from "./project-node.js";
 import { updateNodeMotion } from "./update-motion.js";
 
 /**
  * Resolves canvas colors from the shared CSS palette.
  *
- * @returns {{line: string, node: string}} Healthy network colors.
+ * @returns {{line: string, node: string, danger: string}} Resolved network colors.
  */
 function getNetworkColors() {
   const styles = getComputedStyle(document.documentElement);
   return {
     line: styles.getPropertyValue("--color-line").trim() || "rgba(255, 255, 255, 0.3)",
     node: styles.getPropertyValue("--color-node").trim() || "#fff",
+    danger: styles.getPropertyValue("--color-danger").trim() || "#ff3b3b",
   };
 }
 
@@ -38,8 +40,10 @@ export function initializeNetworkScene(hero, canvas) {
   const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const camera = { ...NETWORK_CONFIG.camera, focusX: 0, focusY: 0 };
   const colors = getNetworkColors();
+  const sceneSeed = createRandomSeed();
   let nodes = [];
   let edges = [];
+  let infectionEngine;
   let projectedNodes = [];
   let viewport = { width: 0, height: 0, pixelRatio: 1 };
   let nodeCount = 0;
@@ -50,9 +54,16 @@ export function initializeNetworkScene(hero, canvas) {
 
   const rebuildGraph = () => {
     nodeCount = getNetworkNodeCount(hero.clientWidth, motionQuery.matches);
-    const random = createSeededRandom(80134 + nodeCount);
+    const random = createSeededRandom(sceneSeed + nodeCount);
     nodes = createNodes(nodeCount, NETWORK_CONFIG.bounds, random);
     edges = createEdges(nodes, NETWORK_CONFIG.maximumDegree, NETWORK_CONFIG.extraEdgeRatio);
+    infectionEngine = createInfectionEngine(
+      nodes,
+      edges,
+      createSeededRandom(sceneSeed ^ (0x9e3779b9 + nodeCount)),
+      NETWORK_CONFIG.infection,
+      motionQuery.matches,
+    );
   };
 
   const resizeScene = () => {
@@ -90,13 +101,14 @@ export function initializeNetworkScene(hero, canvas) {
     if (!motionQuery.matches) {
       updateNodeMotion(nodes, NETWORK_CONFIG.bounds, deltaSeconds);
     }
+    updateInfection(infectionEngine, time);
 
     projectedNodes = nodes.map((node) => (
       projectNode(node, camera, viewport, NETWORK_CONFIG.bounds)
     ));
     context.clearRect(0, 0, viewport.width, viewport.height);
-    drawEdges(context, edges, projectedNodes, colors.line);
-    drawNodes(context, projectedNodes, colors.node);
+    drawEdges(context, edges, projectedNodes, colors.line, colors.danger, time);
+    drawNodes(context, nodes, projectedNodes, colors.node, colors.danger, time);
 
     if (!motionQuery.matches) {
       requestFrame();
