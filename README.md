@@ -4,7 +4,7 @@ A dependency-free cybersecurity portfolio combining a software engineering found
 
 ## Status
 
-Phases 0 through 5 are complete, including the decorative Canvas 2D network, pointer and touch interactions, reduced-motion behavior, and adaptive rendering quality.
+Phases 0 through 6 are complete, including the decorative Canvas 2D network, pointer and touch interactions, accessibility and performance work, verified portfolio content, and release metadata.
 
 The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Ambient infections propagate through connected edges and recover automatically. Pointer proximity gently focuses and zooms the camera before triggering a bounded connected outbreak; contained touch taps trigger the same effect without blocking normal scrolling.
 
@@ -68,6 +68,7 @@ A local web server is required because the browser loads the JavaScript as nativ
 - Viewport-aware pixel density and glow scaling to reduce mobile canvas work
 - Automatic animation pausing when the hero or browser tab is not visible
 - Verified project summaries based on the linked public repositories
+- Open Graph and large-card social metadata with a project-local preview image
 - Custom 404 page using the same visual language
 - Dependency-free modular CSS and minimal native ES-module JavaScript
 
@@ -89,6 +90,22 @@ After reviewing the local commits, the owner can:
 4. In GitHub Pages settings, select **Deploy from a branch**, then choose `main` and `/docs`.
 
 No remote or Pages configuration is required for local development. Remote creation, pushing, and Pages settings remain deliberate owner-controlled actions.
+
+The canonical and social-preview URLs currently target `https://cade-bray.github.io/Portfolio/`. Update those values in `docs/index.html` before publishing if the repository name or final domain changes.
+
+## Release checklist
+
+Before publishing:
+
+- Review the complete page at 320-pixel mobile, larger mobile, tablet, and desktop widths.
+- Navigate from the skip link through every interactive element using only the keyboard.
+- Open and close the mobile menu with the toggle and Escape key.
+- Confirm normal motion, reduced motion, pointer zoom, touch scrolling, and contained outbreaks feel comfortable.
+- Verify every external repository, GitHub, LinkedIn, email, and Signal link.
+- Confirm the four project summaries and all timeline wording remain professionally accurate.
+- Check the homepage and custom 404 page through the local server.
+- After publishing, verify the canonical URL and social preview with the final public Pages address.
+- Confirm GitHub Pages is configured for `main` and `/docs` and that the working tree is clean before pushing.
 
 ## Maintenance
 
