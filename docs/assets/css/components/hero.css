@@ -110,11 +110,6 @@
   line-height: 1.16;
 }
 
-.hero-support {
-  margin-block-start: 1rem;
-  color: var(--color-text-muted);
-}
-
 .hero-actions {
   margin-block-start: 2rem;
 }
