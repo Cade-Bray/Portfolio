@@ -1,6 +1,6 @@
 # Cade Bray Portfolio
 
-A dependency-free cybersecurity portfolio combining a software engineering foundation with secure design, physical security, RFID, community involvement, and risk management.
+A dependency-free cybersecurity portfolio combining a software engineering foundation with secure design, connected systems, RFID, community involvement, and risk management.
 
 ## Status
 
