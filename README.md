@@ -4,7 +4,9 @@ A dependency-free cybersecurity portfolio combining a software engineering found
 
 ## Status
 
-The repository is designed for incremental implementation with small, understandable local Git commits. Update this section as major capabilities are completed.
+Phase 0 and Phase 1 are complete: the repository foundation, semantic single-page structure, responsive visual system, navigation, verified project summaries, profile content, contact links, and 404 page are implemented.
+
+The decorative Canvas 2D network is intentionally deferred to Phase 2. The current hero remains readable and complete without animation.
 
 ## Technology
 
@@ -28,7 +30,9 @@ portfolio/
     |-- .nojekyll
     `-- assets/
         |-- css/
+        |   `-- components/
         |-- js/
+        |   `-- ui/
         |-- images/
         `-- icons/
 ```
@@ -47,11 +51,33 @@ Then open `http://localhost:8000/` in a modern browser.
 
 A local web server is required because the browser loads the JavaScript as native ES modules.
 
+## Implemented features
+
+- Semantic, single-page portfolio with anchor navigation
+- Responsive header with direct access to Projects, GitHub, and LinkedIn
+- Hero, focus areas, selected projects, community timeline, about, and contact sections
+- Verified project summaries based on the linked public repositories
+- Custom 404 page using the same visual language
+- Dependency-free modular CSS and minimal native ES-module JavaScript
+
+## Accessibility
+
+The static foundation includes semantic landmarks, a visible-on-focus skip link, ordered headings, visible keyboard focus styles, descriptive link text, touch-sized navigation targets, and reduced-motion-safe smooth scrolling. All meaningful content remains in the HTML and is available if JavaScript is disabled.
+
+Final keyboard, screen-size, and visual checks remain the owner's responsibility before publishing.
+
 ## Deployment
 
 Deployment remains owner-controlled.
 
-After reviewing the local commits, the owner can push them to the `Cade-Bray/portfolio` repository and configure GitHub Pages to deploy from the `main` branch and `/docs` folder. Codex must not create the remote, push, or change repository settings unless these repository rules are explicitly revised later.
+After reviewing the local commits, the owner can:
+
+1. Create or select the `Cade-Bray/portfolio` repository.
+2. Add it as the local `origin` remote.
+3. Push the local `main` branch.
+4. In GitHub Pages settings, select **Deploy from a branch**, then choose `main` and `/docs`.
+
+No remote or Pages configuration is required for local development. Codex does not create the remote, push, or change repository settings.
 
 ## Maintenance
 
