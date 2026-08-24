@@ -5,8 +5,13 @@
  * @returns {() => void} Cleanup function that removes the scroll listener.
  */
 export function initializeHeaderState(header) {
+  let isScrolled;
+
   const updateState = () => {
-    header.classList.toggle("is-scrolled", window.scrollY > 24);
+    const nextState = window.scrollY > 24;
+    if (nextState === isScrolled) return;
+    isScrolled = nextState;
+    header.classList.toggle("is-scrolled", isScrolled);
   };
 
   updateState();

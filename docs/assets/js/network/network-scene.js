@@ -1,4 +1,4 @@
-import { getNetworkNodeCount, NETWORK_CONFIG } from "../config/network-config.js";
+import { getNetworkNodeCount, getNetworkRenderQuality, NETWORK_CONFIG } from "../config/network-config.js";
 import { createRandomSeed, createSeededRandom } from "../utilities/random.js";
 import { resizeCanvasToDisplaySize } from "../utilities/viewport.js";
 import { updateCamera } from "./camera-controller.js";
@@ -55,6 +55,7 @@ export function initializeNetworkScene(hero, canvas) {
   let projectedNodes = [];
   const projectionFrame = {};
   let viewport = { width: 0, height: 0, pixelRatio: 1 };
+  let renderQuality = NETWORK_CONFIG.renderQuality.standard;
   let nodeCount = 0;
   let animationFrame = 0;
   let lastTime = 0;
@@ -67,11 +68,15 @@ export function initializeNetworkScene(hero, canvas) {
     nodes = createNodes(nodeCount, NETWORK_CONFIG.bounds, random);
     edges = createEdges(nodes, NETWORK_CONFIG.maximumDegree, NETWORK_CONFIG.extraEdgeRatio);
     projectedNodes = Array.from({ length: nodeCount }, () => ({ visible: false }));
+    pointer.active = false;
     pointer.nodeId = -1;
     pointer.influence = 0;
     pointer.tapPending = false;
     pointer.lastBurstNodeId = -1;
     pointer.burstNodeId = -1;
+    if (motionQuery.matches) {
+      Object.assign(camera, NETWORK_CONFIG.camera, { focusX: 0, focusY: 0 });
+    }
     infectionEngine = createInfectionEngine(
       nodes,
       edges,
@@ -82,7 +87,8 @@ export function initializeNetworkScene(hero, canvas) {
   };
 
   const resizeScene = () => {
-    viewport = resizeCanvasToDisplaySize(canvas, NETWORK_CONFIG.maximumPixelRatio);
+    renderQuality = getNetworkRenderQuality(canvas.clientWidth, motionQuery.matches);
+    viewport = resizeCanvasToDisplaySize(canvas, renderQuality.maximumPixelRatio);
     context.setTransform(viewport.pixelRatio, 0, 0, viewport.pixelRatio, 0, 0);
     const nextCount = getNetworkNodeCount(viewport.width, motionQuery.matches);
     if (nextCount !== nodeCount) {
@@ -159,7 +165,10 @@ export function initializeNetworkScene(hero, canvas) {
     }
     context.clearRect(0, 0, viewport.width, viewport.height);
     drawEdges(context, edges, projectedNodes, colors.line, colors.danger, time);
-    drawNodes(context, nodes, projectedNodes, colors.node, colors.danger, time);
+    drawNodes(
+      context, nodes, projectedNodes, colors.node, colors.danger, time,
+      renderQuality.glowScale,
+    );
 
     if (!motionQuery.matches) {
       requestFrame();
@@ -174,6 +183,11 @@ export function initializeNetworkScene(hero, canvas) {
 
   const handleVisibility = () => {
     lastTime = 0;
+    if (document.visibilityState !== "visible" && animationFrame) {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      return;
+    }
     requestFrame();
   };
 

@@ -8,7 +8,7 @@
   position: fixed;
   border-color: var(--color-border);
   background: rgba(3, 3, 3, 0.92);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(10px);
 }
 
 .site-nav {
@@ -54,6 +54,10 @@
 @media (max-width: 48rem) {
   .site-header {
     background: rgba(3, 3, 3, 0.88);
+  }
+
+  .site-header.is-scrolled {
+    backdrop-filter: none;
   }
 
   .site-nav {

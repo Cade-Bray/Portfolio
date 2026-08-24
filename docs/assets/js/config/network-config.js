@@ -5,6 +5,12 @@ export const NETWORK_CONFIG = Object.freeze({
     mobile: 28,
     reducedMotion: 18,
   }),
+  renderQuality: Object.freeze({
+    large: Object.freeze({ maximumPixelRatio: 2, glowScale: 1 }),
+    standard: Object.freeze({ maximumPixelRatio: 1.75, glowScale: 0.8 }),
+    mobile: Object.freeze({ maximumPixelRatio: 1.4, glowScale: 0.4 }),
+    reducedMotion: Object.freeze({ maximumPixelRatio: 1, glowScale: 0 }),
+  }),
   breakpoints: Object.freeze({
     large: 1280,
     mobile: 768,
@@ -64,7 +70,6 @@ export const NETWORK_CONFIG = Object.freeze({
   }),
   maximumDegree: 4,
   extraEdgeRatio: 0.55,
-  maximumPixelRatio: 2,
 });
 
 /**
@@ -88,4 +93,18 @@ export function getNetworkNodeCount(viewportWidth, reducedMotion) {
   }
 
   return NETWORK_CONFIG.nodeCounts.standard;
+}
+
+/**
+ * Chooses reusable canvas quality limits for the current viewport.
+ *
+ * @param {number} viewportWidth - Current viewport width in CSS pixels.
+ * @param {boolean} reducedMotion - Whether the user requests reduced motion.
+ * @returns {{maximumPixelRatio: number, glowScale: number}} Shared quality settings.
+ */
+export function getNetworkRenderQuality(viewportWidth, reducedMotion) {
+  if (reducedMotion) return NETWORK_CONFIG.renderQuality.reducedMotion;
+  if (viewportWidth < NETWORK_CONFIG.breakpoints.mobile) return NETWORK_CONFIG.renderQuality.mobile;
+  if (viewportWidth >= NETWORK_CONFIG.breakpoints.large) return NETWORK_CONFIG.renderQuality.large;
+  return NETWORK_CONFIG.renderQuality.standard;
 }

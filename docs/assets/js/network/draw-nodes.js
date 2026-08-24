@@ -5,11 +5,12 @@ import { getNodeInfectionLevel } from "./infection-levels.js";
  *
  * @param {CanvasRenderingContext2D} context - Canvas drawing context.
  * @param {object} node - Projected node geometry.
+ * @param {number} glowScale - Viewport-specific shadow intensity.
  * @returns {void}
  */
-function drawBaseNode(context, node) {
+function drawBaseNode(context, node, glowScale) {
   context.globalAlpha = node.opacity;
-  context.shadowBlur = Math.min(8, node.radius * 2.2);
+  context.shadowBlur = Math.min(8, node.radius * 2.2) * glowScale;
   context.beginPath();
   context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
   context.fill();
@@ -21,11 +22,12 @@ function drawBaseNode(context, node) {
  * @param {CanvasRenderingContext2D} context - Canvas drawing context.
  * @param {object} node - Projected node geometry.
  * @param {number} strength - Infection strength from zero to one.
+ * @param {number} glowScale - Viewport-specific shadow intensity.
  * @returns {void}
  */
-function drawInfectedNode(context, node, strength) {
+function drawInfectedNode(context, node, strength, glowScale) {
   context.globalAlpha = node.opacity * strength;
-  context.shadowBlur = 6 + strength * 12;
+  context.shadowBlur = (6 + strength * 12) * glowScale;
   context.beginPath();
   context.arc(node.x, node.y, node.radius * (1 + strength * 0.4), 0, Math.PI * 2);
   context.fill();
@@ -46,9 +48,10 @@ function drawInfectedNode(context, node, strength) {
  * @param {string} nodeColor - Resolved CSS color for healthy nodes.
  * @param {string} dangerColor - Resolved CSS color for infected nodes.
  * @param {number} time - Current animation timestamp.
+ * @param {number} glowScale - Viewport-specific shadow intensity.
  * @returns {void}
  */
-export function drawNodes(context, nodes, projectedNodes, nodeColor, dangerColor, time) {
+export function drawNodes(context, nodes, projectedNodes, nodeColor, dangerColor, time, glowScale) {
   context.save();
 
   for (let index = 0; index < projectedNodes.length; index += 1) {
@@ -59,14 +62,14 @@ export function drawNodes(context, nodes, projectedNodes, nodeColor, dangerColor
 
     context.fillStyle = nodeColor;
     context.shadowColor = nodeColor;
-    drawBaseNode(context, projectedNode);
+    drawBaseNode(context, projectedNode, glowScale);
 
     const strength = getNodeInfectionLevel(nodes[index], time);
     if (strength > 0) {
       context.fillStyle = dangerColor;
       context.strokeStyle = dangerColor;
       context.shadowColor = dangerColor;
-      drawInfectedNode(context, projectedNode, strength);
+      drawInfectedNode(context, projectedNode, strength, glowScale);
     }
   }
 
