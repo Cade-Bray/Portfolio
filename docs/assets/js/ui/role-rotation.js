@@ -43,15 +43,18 @@ function setRole(prefix, suffix, role) {
  * @returns {Promise<void>} Promise resolved after the entry transition begins.
  */
 async function transitionRole(root, prefix, suffix, role, isCurrent) {
-  root.classList.add("is-exiting");
+  const removesEngineer = role[1] === "";
+
+  root.classList.add("is-prefix-exiting");
+  if (removesEngineer) root.classList.add("is-suffix-exiting");
   await wait(TRANSITION_DURATION);
 
   if (!isCurrent()) return;
 
   setRole(prefix, suffix, role);
-  root.classList.remove("is-exiting");
-  root.classList.add("is-entering");
-  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("is-entering")));
+  root.classList.remove("is-prefix-exiting", "is-suffix-exiting");
+  root.classList.add("is-prefix-entering");
+  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("is-prefix-entering")));
   await wait(TRANSITION_DURATION);
 }
 
@@ -97,7 +100,7 @@ export function initializeRoleRotation(root) {
 
   const startCycle = () => {
     const currentId = ++cycleId;
-    root.classList.remove("is-exiting", "is-entering");
+    root.classList.remove("is-prefix-exiting", "is-prefix-entering", "is-suffix-exiting");
     void playSequence(root, prefix, suffix, () => currentId === cycleId);
     window.clearTimeout(restartTimer);
     restartTimer = window.setTimeout(startCycle, RESTART_INTERVAL);
@@ -116,5 +119,6 @@ export function initializeRoleRotation(root) {
     cycleId += 1;
     window.clearTimeout(restartTimer);
     window.removeEventListener("scroll", handleScroll);
+    root.classList.remove("is-prefix-exiting", "is-prefix-entering", "is-suffix-exiting");
   };
 }
