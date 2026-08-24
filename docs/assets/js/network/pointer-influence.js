@@ -31,6 +31,33 @@ function findNearestNode(projectedNodes, x, y, radius, result) {
 }
 
 /**
+ * Keeps the current node selected until a nearby replacement is meaningfully closer.
+ *
+ * @param {object} state - Mutable pointer influence state.
+ * @param {Array<object>} projectedNodes - Reused projected-node records.
+ * @param {object} config - Interaction radius and switch-bias configuration.
+ * @returns {void}
+ */
+function stabilizeNearestNode(state, projectedNodes, config) {
+  if (state.nodeId < 0 || state.nearest.nodeId === state.nodeId) {
+    return;
+  }
+
+  const current = projectedNodes[state.nodeId];
+  if (!current?.visible) {
+    return;
+  }
+  const offsetX = current.x - state.x;
+  const offsetY = current.y - state.y;
+  const currentDistance = Math.hypot(offsetX, offsetY);
+  if (currentDistance <= config.radius
+    && currentDistance <= state.nearest.distance + config.nodeSwitchBias) {
+    state.nearest.nodeId = state.nodeId;
+    state.nearest.distance = currentDistance;
+  }
+}
+
+/**
  * Creates mutable pointer influence state reused for the scene lifetime.
  *
  * @returns {object} Pointer coordinates, influence, and reusable query state.
@@ -45,6 +72,10 @@ export function createPointerInfluence() {
     rectangleDirty: true,
     nodeId: -1,
     influence: 0,
+    lastBurstNodeId: -1,
+    nextBurstAt: 0,
+    burstNodeId: -1,
+    burstIntensity: 0,
     nearest: { nodeId: -1, distance: Infinity },
   };
 }
@@ -55,24 +86,41 @@ export function createPointerInfluence() {
  * @param {object} state - Mutable pointer influence state.
  * @param {Array<object>} projectedNodes - Reused projected-node records.
  * @param {number} deltaSeconds - Elapsed frame time in seconds.
+ * @param {number} time - Current animation timestamp.
  * @param {object} config - Interaction radius and response configuration.
  * @returns {void}
  */
-export function updatePointerInfluence(state, projectedNodes, deltaSeconds, config) {
+export function updatePointerInfluence(state, projectedNodes, deltaSeconds, time, config) {
   let targetInfluence = 0;
   let targetNodeId = -1;
 
   if (state.active) {
     findNearestNode(projectedNodes, state.x, state.y, config.radius, state.nearest);
+    stabilizeNearestNode(state, projectedNodes, config);
     targetNodeId = state.nearest.nodeId;
     if (targetNodeId >= 0) {
       targetInfluence = 1 - state.nearest.distance / config.radius;
     }
   }
 
-  const response = 1 - Math.exp(-config.influenceResponse * deltaSeconds);
+  const responseRate = targetInfluence < state.influence
+    ? config.influenceExitResponse
+    : config.influenceEnterResponse;
+  const response = 1 - Math.exp(-responseRate * deltaSeconds);
   state.influence += (targetInfluence - state.influence) * response;
   state.nodeId = targetNodeId >= 0 ? targetNodeId : state.nodeId;
+  if (targetNodeId >= 0
+    && state.influence >= config.outbreakThreshold
+    && targetNodeId !== state.lastBurstNodeId
+    && time >= state.nextBurstAt) {
+    state.burstNodeId = targetNodeId;
+    state.burstIntensity = state.influence;
+    state.lastBurstNodeId = targetNodeId;
+    state.nextBurstAt = time + config.outbreakCooldown;
+  }
+  if (targetInfluence === 0 && state.influence < 0.08) {
+    state.lastBurstNodeId = -1;
+  }
   if (state.influence < 0.005 && targetNodeId < 0) {
     state.influence = 0;
     state.nodeId = -1;

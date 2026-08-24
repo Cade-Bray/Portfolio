@@ -4,9 +4,9 @@ A dependency-free cybersecurity portfolio combining a software engineering found
 
 ## Status
 
-Phases 0 through 3 are complete, including the decorative Canvas 2D network and ambient infection system.
+Phases 0 through 4 are complete, including the decorative Canvas 2D network, ambient infection system, and pointer and touch interactions.
 
-The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Ambient infections now propagate through connected edges and recover automatically. Pointer-driven outbreaks remain deferred to Phase 4.
+The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Ambient infections propagate through connected edges and recover automatically. Pointer proximity gently focuses and zooms the camera before triggering a bounded connected outbreak; contained touch taps trigger the same effect without blocking normal scrolling.
 
 ## Technology
 
@@ -62,6 +62,9 @@ A local web server is required because the browser loads the JavaScript as nativ
 - Connected perspective network with responsive node counts and calm three-dimensional drift
 - Fresh randomized node placement on each page load
 - Bounded ambient infections with connected edge pulses and automatic recovery
+- Eased pointer focus and zoom with a slower release to prevent abrupt camera movement
+- Bounded pointer and touch outbreaks that propagate through real graph connections
+- Reused projection, adjacency, and outbreak buffers to reduce animation-loop allocations
 - Automatic animation pausing when the hero or browser tab is not visible
 - Verified project summaries based on the linked public repositories
 - Custom 404 page using the same visual language
@@ -84,7 +87,7 @@ After reviewing the local commits, the owner can:
 3. Push the local `main` branch.
 4. In GitHub Pages settings, select **Deploy from a branch**, then choose `main` and `/docs`.
 
-No remote or Pages configuration is required for local development. Codex does not create the remote, push, or change repository settings.
+No remote or Pages configuration is required for local development. Remote creation, pushing, and Pages settings remain deliberate owner-controlled actions.
 
 ## Maintenance
 

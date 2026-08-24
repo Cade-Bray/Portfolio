@@ -6,8 +6,12 @@ import { createEdges } from "./create-edges.js";
 import { createNodes } from "./create-nodes.js";
 import { drawEdges } from "./draw-edges.js";
 import { drawNodes } from "./draw-nodes.js";
-import { createInfectionEngine, updateInfection } from "./infection-engine.js";
-import { createPointerInfluence, updatePointerInfluence } from "./pointer-influence.js";
+import { createInfectionEngine, triggerOutbreak, updateInfection } from "./infection-engine.js";
+import {
+  consumeTapTarget,
+  createPointerInfluence,
+  updatePointerInfluence,
+} from "./pointer-influence.js";
 import { initializePointerTracker } from "./pointer-tracker.js";
 import { prepareProjectionFrame, projectNodeInto } from "./project-node.js";
 import { updateNodeMotion } from "./update-motion.js";
@@ -66,6 +70,8 @@ export function initializeNetworkScene(hero, canvas) {
     pointer.nodeId = -1;
     pointer.influence = 0;
     pointer.tapPending = false;
+    pointer.lastBurstNodeId = -1;
+    pointer.burstNodeId = -1;
     infectionEngine = createInfectionEngine(
       nodes,
       edges,
@@ -123,7 +129,25 @@ export function initializeNetworkScene(hero, canvas) {
       );
     }
     if (!motionQuery.matches) {
-      updatePointerInfluence(pointer, projectedNodes, deltaSeconds, NETWORK_CONFIG.interaction);
+      updatePointerInfluence(
+        pointer,
+        projectedNodes,
+        deltaSeconds,
+        time,
+        NETWORK_CONFIG.interaction,
+      );
+      if (pointer.burstNodeId >= 0) {
+        triggerOutbreak(infectionEngine, pointer.burstNodeId, time, pointer.burstIntensity);
+        pointer.burstNodeId = -1;
+      }
+      const tapTarget = consumeTapTarget(
+        pointer,
+        projectedNodes,
+        NETWORK_CONFIG.interaction.radius * 1.15,
+      );
+      if (tapTarget >= 0) {
+        triggerOutbreak(infectionEngine, tapTarget, time, 0);
+      }
       const targetNode = pointer.nodeId >= 0 ? nodes[pointer.nodeId] : null;
       updateCamera(
         camera,

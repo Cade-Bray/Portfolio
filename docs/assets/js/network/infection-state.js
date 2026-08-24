@@ -124,3 +124,29 @@ export function updateEdgeStates(edges, time) {
     }
   }
 }
+
+/**
+ * Clears active infection state before a new connected outbreak begins.
+ *
+ * @param {Array<object>} nodes - Mutable network nodes.
+ * @param {Array<object>} edges - Mutable network edges.
+ * @returns {void}
+ */
+export function resetInfectionStates(nodes, edges) {
+  for (let index = 0; index < nodes.length; index += 1) {
+    const node = nodes[index];
+    node.state = "healthy";
+    node.stateStarted = 0;
+    node.stateUntil = 0;
+    node.transitionDuration = 0;
+  }
+
+  for (let index = 0; index < edges.length; index += 1) {
+    const edge = edges[index];
+    edge.state = "healthy";
+    edge.progress = 0;
+    edge.stateStarted = 0;
+    edge.recoveryStarted = 0;
+    edge.stateUntil = 0;
+  }
+}

@@ -1,11 +1,16 @@
-import { updateEdgeStates, updateNodeStates } from "./infection-state.js";
+import { resetInfectionStates, updateEdgeStates, updateNodeStates } from "./infection-state.js";
 import {
   applyStaticPath,
-  createEdgeLookup,
   scheduleNextAmbient,
   startAmbientSequence,
   updateTransmission,
 } from "./infection-sequence.js";
+import {
+  createOutbreakConfig,
+  createOutbreakState,
+  startOutbreak,
+  updateOutbreak,
+} from "./outbreak-engine.js";
 
 /**
  * Creates isolated ambient infection state for one connected graph.
@@ -28,7 +33,8 @@ export function createInfectionEngine(nodes, edges, random, config, reducedMotio
     nextAmbientAt: 0,
     transmission: null,
     maximumActiveNodes: Math.max(2, Math.floor(nodes.length * config.maximumActiveRatio)),
-    edgeByPair: createEdgeLookup(edges),
+    outbreak: createOutbreakState(nodes.length),
+    outbreakConfig: createOutbreakConfig(config),
   };
 
   if (reducedMotion && edges.length > 0) {
@@ -52,6 +58,10 @@ export function updateInfection(engine, time) {
 
   updateNodeStates(engine.nodes, time, engine.random, engine.config);
   updateEdgeStates(engine.edges, time);
+  if (engine.outbreak.active) {
+    updateOutbreak(engine, time);
+    return;
+  }
   updateTransmission(engine, time);
 
   if (!engine.started) {
@@ -60,4 +70,23 @@ export function updateInfection(engine, time) {
   } else if (!engine.transmission && time >= engine.nextAmbientAt) {
     startAmbientSequence(engine, time);
   }
+}
+
+/**
+ * Replaces ambient state with a bounded connected interaction outbreak.
+ *
+ * @param {object} engine - Mutable infection engine state.
+ * @param {number} centerId - Starting node identifier.
+ * @param {number} time - Current animation timestamp.
+ * @param {number} intensity - Outbreak strength from zero to one.
+ * @returns {number} Number of nodes included, or zero when disabled.
+ */
+export function triggerOutbreak(engine, centerId, time, intensity) {
+  if (engine.static || centerId < 0 || centerId >= engine.nodes.length) {
+    return 0;
+  }
+
+  engine.transmission = null;
+  resetInfectionStates(engine.nodes, engine.edges);
+  return startOutbreak(engine, centerId, time, intensity);
 }

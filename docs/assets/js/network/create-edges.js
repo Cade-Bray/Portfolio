@@ -31,11 +31,14 @@ function addEdge(edges, keys, nodes, sourceId, targetId) {
     return;
   }
 
+  const edgeId = edges.length;
   keys.add(key);
   nodes[sourceId].neighbors.push(targetId);
+  nodes[sourceId].neighborEdges.push(edgeId);
   nodes[targetId].neighbors.push(sourceId);
+  nodes[targetId].neighborEdges.push(edgeId);
   edges.push({
-    id: edges.length,
+    id: edgeId,
     sourceId,
     targetId,
     state: "healthy",
@@ -102,6 +105,7 @@ export function createEdges(nodes, maximumDegree, extraEdgeRatio) {
 
   nodes.forEach((node) => {
     node.neighbors.length = 0;
+    node.neighborEdges.length = 0;
   });
 
   addSpanningTree(nodes, edges, keys, maximumDegree);

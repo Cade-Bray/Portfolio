@@ -9,10 +9,13 @@
  * @returns {void}
  */
 export function updateCamera(camera, targetNode, influence, deltaSeconds, config) {
-  const response = 1 - Math.exp(-config.cameraResponse * deltaSeconds);
   const targetX = targetNode ? targetNode.x * influence : 0;
   const targetY = targetNode ? targetNode.y * influence : 0;
   const targetZoom = 1 + (config.maximumZoom - 1) * influence;
+  const responseRate = targetZoom < camera.zoom
+    ? config.cameraReleaseResponse
+    : config.cameraResponse;
+  const response = 1 - Math.exp(-responseRate * deltaSeconds);
 
   camera.focusX += (targetX - camera.focusX) * response;
   camera.focusY += (targetY - camera.focusY) * response;

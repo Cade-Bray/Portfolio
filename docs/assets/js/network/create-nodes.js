@@ -33,5 +33,6 @@ export function createNodes(count, bounds, random) {
     stateUntil: 0,
     transitionDuration: 0,
     neighbors: [],
+    neighborEdges: [],
   }));
 }

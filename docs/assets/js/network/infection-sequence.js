@@ -4,13 +4,10 @@ import {
   infectNode,
   updateTransmissionProgress,
 } from "./infection-state.js";
+import { getConnectedEdge } from "./get-connected-edge.js";
 
 function randomBetween(random, minimum, maximum) {
   return minimum + random() * (maximum - minimum);
-}
-
-function edgeKey(firstId, secondId) {
-  return firstId < secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 }
 
 function choose(items, random) {
@@ -24,7 +21,30 @@ function choose(items, random) {
  * @returns {number} Active infected or recovering node count.
  */
 function countActiveNodes(nodes) {
-  return nodes.filter((node) => node.state !== "healthy").length;
+  let count = 0;
+  for (let index = 0; index < nodes.length; index += 1) {
+    count += nodes[index].state === "healthy" ? 0 : 1;
+  }
+  return count;
+}
+
+/**
+ * Checks for one available connected target without allocating a list.
+ *
+ * @param {object} engine - Infection engine state.
+ * @param {number} sourceId - Source node identifier.
+ * @returns {boolean} Whether a healthy target edge exists.
+ */
+function hasHealthyTarget(engine, sourceId) {
+  const neighbors = engine.nodes[sourceId].neighbors;
+  for (let index = 0; index < neighbors.length; index += 1) {
+    const targetId = neighbors[index];
+    const edge = getConnectedEdge(engine.nodes, engine.edges, sourceId, targetId);
+    if (engine.nodes[targetId].state === "healthy" && edge.state === "healthy") {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -37,7 +57,7 @@ function countActiveNodes(nodes) {
  */
 function getHealthyTargets(engine, sourceId, visited) {
   return engine.nodes[sourceId].neighbors.filter((targetId) => {
-    const edge = engine.edgeByPair.get(edgeKey(sourceId, targetId));
+    const edge = getConnectedEdge(engine.nodes, engine.edges, sourceId, targetId);
     return !visited.has(targetId)
       && engine.nodes[targetId].state === "healthy"
       && edge.state === "healthy";
@@ -95,7 +115,7 @@ function scheduleTransmission(engine, sourceId, targetId, time, hopsRemaining, v
 export function startAmbientSequence(engine, time) {
   const availableCapacity = engine.maximumActiveNodes - countActiveNodes(engine.nodes);
   const candidates = engine.nodes.filter((node) => (
-    node.state === "healthy" && getHealthyTargets(engine, node.id, new Set()).length > 0
+    node.state === "healthy" && hasHealthyTarget(engine, node.id)
   ));
 
   if (availableCapacity >= 2 && candidates.length > 0) {
@@ -120,7 +140,12 @@ export function startAmbientSequence(engine, time) {
  * @returns {void}
  */
 function completeTransmission(engine, transmission, time) {
-  const edge = engine.edgeByPair.get(edgeKey(transmission.sourceId, transmission.targetId));
+  const edge = getConnectedEdge(
+    engine.nodes,
+    engine.edges,
+    transmission.sourceId,
+    transmission.targetId,
+  );
   infectEdge(edge, time, engine.random, engine.config);
   infectNode(engine.nodes[transmission.targetId], time, engine.random, engine.config);
   engine.transmission = null;
@@ -158,7 +183,12 @@ export function updateTransmission(engine, time) {
     return;
   }
 
-  const edge = engine.edgeByPair.get(edgeKey(transmission.sourceId, transmission.targetId));
+  const edge = getConnectedEdge(
+    engine.nodes,
+    engine.edges,
+    transmission.sourceId,
+    transmission.targetId,
+  );
   if (edge.state === "healthy") {
     beginEdgeTransmission(edge, transmission.startAt, transmission.duration);
   }
@@ -183,14 +213,4 @@ export function applyStaticPath(engine) {
   infectEdge(edge, 0, engine.random, engine.config);
   edge.recoveryStarted = Infinity;
   edge.stateUntil = Infinity;
-}
-
-/**
- * Indexes undirected graph edges for constant-time propagation lookup.
- *
- * @param {Array<object>} edges - Network edges to index.
- * @returns {Map<string, object>} Edge lookup keyed by endpoint identifiers.
- */
-export function createEdgeLookup(edges) {
-  return new Map(edges.map((edge) => [edgeKey(edge.sourceId, edge.targetId), edge]));
 }
