@@ -4,7 +4,7 @@ A dependency-free cybersecurity portfolio combining a software engineering found
 
 ## Status
 
-Phases 0 through 2 are complete. The Phase 3 ambient infection system is implemented and ready for owner visual testing.
+Phases 0 through 3 are complete, including the decorative Canvas 2D network and ambient infection system.
 
 The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Ambient infections now propagate through connected edges and recover automatically. Pointer-driven outbreaks remain deferred to Phase 4.
 
