@@ -37,7 +37,7 @@
   content: "SYSTEM / FAILURE / RECOVERY";
   position: absolute;
   z-index: 2;
-  inset-block-start: 21%;
+  inset-block-start: 18%;
   inset-inline-end: clamp(1rem, 2vw, 1.5rem);
   color: rgba(255, 255, 255, 0.32);
   font-family: var(--font-mono);
