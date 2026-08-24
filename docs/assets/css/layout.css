@@ -1,0 +1,82 @@
+.page-shell {
+  inline-size: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+}
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+}
+
+.site-nav,
+.footer-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  inline-size: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+  padding-block: 1rem;
+}
+
+.nav-group,
+.hero-actions,
+.contact-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero,
+.error-page {
+  display: grid;
+  min-block-size: 100svh;
+  place-items: center;
+}
+
+.hero-content,
+.error-content {
+  position: relative;
+  padding-block: 8rem 5rem;
+}
+
+.section {
+  padding-block: 6rem;
+}
+
+.section-heading {
+  max-inline-size: 48rem;
+  margin-block-end: 3rem;
+}
+
+.focus-grid,
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.5fr);
+  gap: 4rem;
+  align-items: end;
+}
+
+@media (max-width: 48rem) {
+  .focus-grid,
+  .project-grid,
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .site-nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hero-content {
+    padding-block-start: 11rem;
+  }
+}
