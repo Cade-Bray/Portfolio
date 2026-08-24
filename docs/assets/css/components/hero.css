@@ -1,0 +1,82 @@
+.hero,
+.error-page {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 72% 38%, rgba(255, 59, 59, 0.07), transparent 1px),
+    radial-gradient(circle at 74% 42%, rgba(255, 255, 255, 0.7), transparent 1px),
+    radial-gradient(circle at 85% 25%, rgba(255, 255, 255, 0.45), transparent 1px),
+    var(--color-bg);
+  background-size: auto, auto, auto, auto;
+}
+
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--color-bg) 0%, rgba(3, 3, 3, 0.78) 42%, rgba(3, 3, 3, 0.16) 100%),
+    repeating-linear-gradient(90deg, transparent 0, transparent calc(25% - 1px), rgba(255, 255, 255, 0.035) 25%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 92%);
+}
+
+.hero-content {
+  z-index: 1;
+}
+
+.hero-content::before {
+  content: "SYSTEM / FAILURE / RECOVERY";
+  position: absolute;
+  inset-block-start: 21%;
+  inset-inline-end: 0;
+  color: rgba(255, 255, 255, 0.18);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  writing-mode: vertical-rl;
+}
+
+.hero h1 {
+  margin-block-start: 0.75rem;
+  font-size: clamp(4rem, 13vw, 10rem);
+  font-weight: 550;
+  letter-spacing: -0.075em;
+}
+
+.hero-role {
+  color: var(--color-danger);
+  font-family: var(--font-mono);
+  font-size: clamp(0.82rem, 1.4vw, 1rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-statement {
+  max-inline-size: 21ch;
+  margin-block-start: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(1.55rem, 4vw, 3rem);
+  letter-spacing: -0.035em;
+  line-height: 1.16;
+}
+
+.hero-support {
+  margin-block-start: 1rem;
+  color: var(--color-text-muted);
+}
+
+.hero-actions {
+  margin-block-start: 2rem;
+}
+
+.error-content h1 {
+  margin-block-start: 1rem;
+}
+
+.error-content .button {
+  margin-block-start: 2rem;
+}
+
+@media (max-width: 34rem) {
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

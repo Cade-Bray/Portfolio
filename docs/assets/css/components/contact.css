@@ -1,0 +1,46 @@
+.contact {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.contact .eyebrow,
+.contact .section-index,
+.contact-layout > div > p {
+  color: rgba(3, 3, 3, 0.66);
+}
+
+.contact-links {
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.contact-links a {
+  display: flex;
+  min-block-size: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 1rem;
+  border: 1px solid rgba(3, 3, 3, 0.3);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  text-decoration: none;
+}
+
+.contact-links a:hover,
+.contact-links a:focus-visible {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+}
+
+.site-footer {
+  border-block-start: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.site-footer a {
+  min-block-size: 2.75rem;
+  align-content: center;
+  text-underline-offset: 0.3rem;
+}

@@ -1,0 +1,72 @@
+.project-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-card {
+  position: relative;
+  display: flex;
+  min-block-size: 29rem;
+  flex-direction: column;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  transition: border-color var(--duration-base) ease, transform var(--duration-base) ease;
+}
+
+.project-card:hover,
+.project-card:focus-within {
+  border-color: var(--color-danger);
+  transform: translateY(-0.3rem);
+}
+
+.project-card h3 {
+  margin-block: 1rem 1.5rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+
+.project-card p {
+  color: var(--color-text-muted);
+}
+
+.project-card .security-lens {
+  margin-block-start: 1rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--color-danger);
+  color: var(--color-text);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: auto 2rem;
+  padding-block-start: 2rem;
+  list-style: none;
+}
+
+.tag-list li {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.project-link {
+  align-self: flex-start;
+  min-block-size: 2.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-underline-offset: 0.35rem;
+}
+
+.project-link:hover {
+  color: var(--color-danger);
+}
+
+@media (max-width: 48rem) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+}

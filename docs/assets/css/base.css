@@ -1,14 +1,16 @@
 :root {
   color-scheme: dark;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #030303;
-  color: #f5f5f5;
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 body {
-  background: #030303;
-  color: #f5f5f5;
+  min-inline-size: 20rem;
+  background: var(--color-bg);
+  color: var(--color-text);
   line-height: 1.6;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -16,7 +18,7 @@ a {
 }
 
 a:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--color-text);
   outline-offset: 4px;
 }
 
@@ -24,6 +26,16 @@ h1,
 h2,
 h3 {
   line-height: 1.05;
+  text-wrap: balance;
+}
+
+p {
+  max-inline-size: 72ch;
+}
+
+::selection {
+  background: var(--color-danger);
+  color: var(--color-bg);
 }
 
 .skip-link {
@@ -32,9 +44,10 @@ h3 {
   inset-inline-start: 1rem;
   z-index: 100;
   padding: 0.75rem 1rem;
-  background: #fff;
-  color: #030303;
+  background: var(--color-text);
+  color: var(--color-bg);
   transform: translateY(-160%);
+  transition: transform var(--duration-fast) ease;
 }
 
 .skip-link:focus {

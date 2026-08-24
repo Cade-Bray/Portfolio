@@ -1,0 +1,23 @@
+.focus-card {
+  min-block-size: 20rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  background: linear-gradient(145deg, var(--color-bg-elevated), var(--color-bg));
+}
+
+.focus-card .card-number {
+  color: var(--color-danger);
+}
+
+.focus-card h3 {
+  max-inline-size: 10ch;
+  margin-block-start: 5rem;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.focus-card > p:last-child {
+  margin-block-start: 1.25rem;
+  color: var(--color-text-muted);
+}

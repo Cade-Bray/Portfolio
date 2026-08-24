@@ -1,0 +1,60 @@
+.eyebrow,
+.section-index,
+.card-number,
+.project-meta,
+.timeline-kicker {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.section-index {
+  margin-block-end: 1.25rem;
+}
+
+.section-heading h2,
+.contact h2,
+.error-content h1 {
+  max-inline-size: 14ch;
+  font-size: clamp(2.4rem, 7vw, 5.75rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+}
+
+.section-heading > p,
+.contact-layout > div > p,
+.error-content > p {
+  margin-block-start: 1.25rem;
+  color: var(--color-text-muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
+.button {
+  display: inline-flex;
+  min-block-size: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  text-decoration: none;
+  transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.button--primary {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.button--primary:hover {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+}
+
+.button--quiet:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
