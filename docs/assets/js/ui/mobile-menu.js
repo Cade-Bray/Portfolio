@@ -11,6 +11,7 @@ const MOBILE_QUERY = "(max-width: 48rem)";
 function setMenuState(header, toggle, isOpen) {
   header.classList.toggle("is-menu-open", isOpen);
   toggle.setAttribute("aria-expanded", String(isOpen));
+  toggle.setAttribute("aria-label", `${isOpen ? "Close" : "Open"} page navigation`);
 }
 
 /**
