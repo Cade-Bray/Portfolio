@@ -19,6 +19,14 @@ export const NETWORK_CONFIG = Object.freeze({
     focalLength: 1.75,
     zoom: 1,
   }),
+  interaction: Object.freeze({
+    radius: 140,
+    influenceResponse: 11,
+    cameraResponse: 7,
+    maximumZoom: 1.48,
+    tapMaximumDistance: 12,
+    tapMaximumDuration: 350,
+  }),
   infection: Object.freeze({
     ambientDelayMinimum: 3500,
     ambientDelayMaximum: 7000,

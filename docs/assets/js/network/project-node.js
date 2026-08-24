@@ -17,9 +17,9 @@ export function prepareProjectionFrame(target, camera, viewport, bounds) {
   target.width = viewport.width;
   target.height = viewport.height;
   target.horizontalSpread = Math.max(0, target.centerX - safeMargin)
-    / (bounds.x * maximumPerspective * camera.zoom);
+    / (bounds.x * maximumPerspective);
   target.verticalSpread = Math.max(0, target.centerY - safeMargin)
-    / (bounds.y * maximumPerspective * camera.zoom);
+    / (bounds.y * maximumPerspective);
   return target;
 }
 

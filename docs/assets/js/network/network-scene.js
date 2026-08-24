@@ -1,11 +1,14 @@
 import { getNetworkNodeCount, NETWORK_CONFIG } from "../config/network-config.js";
 import { createRandomSeed, createSeededRandom } from "../utilities/random.js";
 import { resizeCanvasToDisplaySize } from "../utilities/viewport.js";
+import { updateCamera } from "./camera-controller.js";
 import { createEdges } from "./create-edges.js";
 import { createNodes } from "./create-nodes.js";
 import { drawEdges } from "./draw-edges.js";
 import { drawNodes } from "./draw-nodes.js";
 import { createInfectionEngine, updateInfection } from "./infection-engine.js";
+import { createPointerInfluence, updatePointerInfluence } from "./pointer-influence.js";
+import { initializePointerTracker } from "./pointer-tracker.js";
 import { prepareProjectionFrame, projectNodeInto } from "./project-node.js";
 import { updateNodeMotion } from "./update-motion.js";
 
@@ -41,6 +44,7 @@ export function initializeNetworkScene(hero, canvas) {
   const camera = { ...NETWORK_CONFIG.camera, focusX: 0, focusY: 0 };
   const colors = getNetworkColors();
   const sceneSeed = createRandomSeed();
+  const pointer = createPointerInfluence();
   let nodes = [];
   let edges = [];
   let infectionEngine;
@@ -59,6 +63,9 @@ export function initializeNetworkScene(hero, canvas) {
     nodes = createNodes(nodeCount, NETWORK_CONFIG.bounds, random);
     edges = createEdges(nodes, NETWORK_CONFIG.maximumDegree, NETWORK_CONFIG.extraEdgeRatio);
     projectedNodes = Array.from({ length: nodeCount }, () => ({ visible: false }));
+    pointer.nodeId = -1;
+    pointer.influence = 0;
+    pointer.tapPending = false;
     infectionEngine = createInfectionEngine(
       nodes,
       edges,
@@ -115,6 +122,17 @@ export function initializeNetworkScene(hero, canvas) {
         projectedNodes[index],
       );
     }
+    if (!motionQuery.matches) {
+      updatePointerInfluence(pointer, projectedNodes, deltaSeconds, NETWORK_CONFIG.interaction);
+      const targetNode = pointer.nodeId >= 0 ? nodes[pointer.nodeId] : null;
+      updateCamera(
+        camera,
+        targetNode,
+        pointer.influence,
+        deltaSeconds,
+        NETWORK_CONFIG.interaction,
+      );
+    }
     context.clearRect(0, 0, viewport.width, viewport.height);
     drawEdges(context, edges, projectedNodes, colors.line, colors.danger, time);
     drawNodes(context, nodes, projectedNodes, colors.node, colors.danger, time);
@@ -145,6 +163,7 @@ export function initializeNetworkScene(hero, canvas) {
   }, { threshold: [0, 0.05] });
 
   const resizeObserver = new ResizeObserver(refreshScene);
+  const destroyPointerTracker = initializePointerTracker(hero, pointer, NETWORK_CONFIG.interaction);
   visibilityObserver.observe(hero);
   resizeObserver.observe(canvas);
   document.addEventListener("visibilitychange", handleVisibility);
@@ -157,6 +176,7 @@ export function initializeNetworkScene(hero, canvas) {
     resizeObserver.disconnect();
     document.removeEventListener("visibilitychange", handleVisibility);
     motionQuery.removeEventListener("change", refreshScene);
+    destroyPointerTracker();
     window.cancelAnimationFrame(animationFrame);
   };
 }
