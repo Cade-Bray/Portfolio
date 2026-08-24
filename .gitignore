@@ -1,0 +1,15 @@
+# Local Codex instruction and planning files
+/Architecture.md
+/AGENTS.md
+/CODEX_KICKOFF.md
+/portfolio-codex-brief.zip
+/.codex-local/
+
+# Add the exact path of any additional local-only planning artifact
+# before the next commit. Do not ignore README.md or /docs/.
+
+# Local operating-system and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
