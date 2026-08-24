@@ -6,16 +6,23 @@ import { clamp } from "../utilities/clamp.js";
  * @param {object} node - Three-dimensional node position and radius.
  * @param {object} camera - Camera distance, focus, focal length, and zoom.
  * @param {object} viewport - Canvas width and height in CSS pixels.
- * @param {number} maximumDepth - Scene depth half-extent used for opacity.
+ * @param {{x: number, y: number, z: number}} bounds - Scene half-extents used to keep nodes in view.
  * @returns {object} Screen position, radius, depth, opacity, and visibility.
  */
-export function projectNode(node, camera, viewport, maximumDepth) {
+export function projectNode(node, camera, viewport, bounds) {
   const depth = Math.max(0.1, camera.distance + node.z);
   const perspective = camera.focalLength / depth;
-  const spread = Math.min(viewport.width * 0.72, viewport.height * 0.9);
-  const x = viewport.width / 2 + (node.x - camera.focusX) * perspective * spread * camera.zoom;
-  const y = viewport.height / 2 + (node.y - camera.focusY) * perspective * spread * camera.zoom;
-  const nearFactor = clamp((maximumDepth - node.z) / (maximumDepth * 2), 0, 1);
+  const maximumPerspective = camera.focalLength / (camera.distance - bounds.z);
+  const safeMargin = Math.max(24, Math.min(viewport.width, viewport.height) * 0.06);
+  const horizontalRange = Math.max(0, viewport.width / 2 - safeMargin);
+  const verticalRange = Math.max(0, viewport.height / 2 - safeMargin);
+  const horizontalSpread = horizontalRange / (bounds.x * maximumPerspective * camera.zoom);
+  const verticalSpread = verticalRange / (bounds.y * maximumPerspective * camera.zoom);
+  const x = viewport.width / 2
+    + (node.x - camera.focusX) * perspective * horizontalSpread * camera.zoom;
+  const y = viewport.height / 2
+    + (node.y - camera.focusY) * perspective * verticalSpread * camera.zoom;
+  const nearFactor = clamp((bounds.z - node.z) / (bounds.z * 2), 0, 1);
   const radius = node.baseRadius * perspective * camera.zoom;
 
   return {

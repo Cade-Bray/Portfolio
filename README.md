@@ -4,9 +4,9 @@ A dependency-free cybersecurity portfolio combining a software engineering found
 
 ## Status
 
-Phase 0 and Phase 1 are complete: the repository foundation, semantic single-page structure, responsive visual system, navigation, verified project summaries, profile content, contact links, and 404 page are implemented.
+Phases 0 and 1 are complete. The Phase 2 decorative Canvas 2D network is implemented and ready for owner visual testing.
 
-The decorative Canvas 2D network is intentionally deferred to Phase 2. The current hero remains readable and complete without animation.
+The hero network uses a connected three-dimensional graph, perspective projection, calm bounded drift, responsive node counts, and lifecycle pausing. Infection and pointer-outbreak behavior remain deferred to later phases.
 
 ## Technology
 
@@ -32,7 +32,10 @@ portfolio/
         |-- css/
         |   `-- components/
         |-- js/
-        |   `-- ui/
+        |   |-- config/
+        |   |-- network/
+        |   |-- ui/
+        |   `-- utilities/
         |-- images/
         `-- icons/
 ```
@@ -56,13 +59,15 @@ A local web server is required because the browser loads the JavaScript as nativ
 - Semantic, single-page portfolio with anchor navigation
 - Responsive header with direct access to Projects, GitHub, and LinkedIn
 - Hero, focus areas, selected projects, community timeline, about, and contact sections
+- Connected perspective network with responsive node counts and calm three-dimensional drift
+- Automatic animation pausing when the hero or browser tab is not visible
 - Verified project summaries based on the linked public repositories
 - Custom 404 page using the same visual language
 - Dependency-free modular CSS and minimal native ES-module JavaScript
 
 ## Accessibility
 
-The static foundation includes semantic landmarks, a visible-on-focus skip link, ordered headings, visible keyboard focus styles, descriptive link text, touch-sized navigation targets, and reduced-motion-safe smooth scrolling. All meaningful content remains in the HTML and is available if JavaScript is disabled.
+The site includes semantic landmarks, a visible-on-focus skip link, ordered headings, visible keyboard focus styles, descriptive link text, touch-sized navigation targets, and reduced-motion-safe behavior. The decorative canvas freezes to a static, lower-density graph when reduced motion is requested. All meaningful content remains in the HTML and is available if JavaScript is disabled.
 
 Final keyboard, screen-size, and visual checks remain the owner's responsibility before publishing.
 
