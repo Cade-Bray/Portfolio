@@ -92,12 +92,7 @@
     gap: 1.5rem;
   }
 
-  .site-nav {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .hero-content {
-    padding-block-start: 11rem;
+    padding-block-start: 8.5rem;
   }
 }

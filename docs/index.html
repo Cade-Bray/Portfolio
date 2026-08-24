@@ -26,7 +26,7 @@
         <div class="nav-group nav-group--identity">
           <a class="brand-link" href="#home" aria-label="Cade Bray, home">Cade Bray</a>
         </div>
-        <div class="nav-group nav-group--sections" role="group" aria-label="Page sections">
+        <div id="section-menu" class="nav-group nav-group--sections" data-section-menu role="group" aria-label="Page sections">
           <a href="#home">Home</a>
           <a href="#focus">Focus</a>
           <a href="#projects">Projects</a>
@@ -38,6 +38,10 @@
           <a href="https://github.com/Cade-Bray" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/cade-bray/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="section-menu">
+          <span class="visually-hidden">Toggle page navigation</span>
+          <span class="menu-toggle__icon" aria-hidden="true"></span>
+        </button>
       </nav>
     </header>
 

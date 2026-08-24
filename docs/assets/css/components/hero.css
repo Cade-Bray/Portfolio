@@ -52,7 +52,7 @@
 
 .hero-role__text {
   display: inline-grid;
-  grid-template-columns: 13ch auto;
+  grid-template-columns: 15ch auto;
   align-items: baseline;
 }
 
@@ -117,6 +117,12 @@
 
 .error-content .button {
   margin-block-start: 2rem;
+}
+
+@media (max-width: 48rem) {
+  .hero-content::before {
+    display: none;
+  }
 }
 
 @media (max-width: 34rem) {
