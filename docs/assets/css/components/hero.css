@@ -42,11 +42,35 @@
 }
 
 .hero-role {
+  min-block-size: 1.75em;
   color: var(--color-danger);
   font-family: var(--font-mono);
   font-size: clamp(0.82rem, 1.4vw, 1rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.hero-role__text {
+  display: inline-block;
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+  transition:
+    opacity var(--duration-base) ease,
+    filter var(--duration-base) ease,
+    transform var(--duration-base) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-role.is-exiting .hero-role__text {
+  opacity: 0;
+  filter: blur(0.18rem);
+  transform: translateY(-0.65em);
+}
+
+.hero-role.is-entering .hero-role__text {
+  opacity: 0;
+  filter: blur(0.18rem);
+  transform: translateY(0.65em);
 }
 
 .hero-statement {
@@ -78,5 +102,11 @@
   .hero-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-role__text {
+    transition: none;
   }
 }

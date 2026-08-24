@@ -11,6 +11,16 @@
   backdrop-filter: blur(14px);
 }
 
+.site-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.nav-group--sections {
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
 .site-nav a {
   display: inline-flex;
   min-block-size: 2.75rem;
@@ -43,11 +53,31 @@
   }
 
   .site-nav {
-    gap: 0;
+    grid-template-columns: 1fr auto;
+    gap: 0 1rem;
+    padding-block: 0.65rem 0;
   }
 
   .nav-group {
-    inline-size: 100%;
     justify-content: space-between;
+  }
+
+  .nav-group--sections {
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+    inline-size: 100%;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    overflow-x: auto;
+    border-block-start: 1px solid var(--color-border);
+    scrollbar-width: none;
+  }
+
+  .nav-group--sections::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-group--sections a {
+    flex: 0 0 auto;
   }
 }
