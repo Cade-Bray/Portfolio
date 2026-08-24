@@ -29,7 +29,9 @@ export function createNodes(count, bounds, random) {
     vz: randomBetween(random, -0.024, 0.024),
     baseRadius: randomBetween(random, 2.1, 3.5),
     state: "healthy",
+    stateStarted: 0,
     stateUntil: 0,
+    transitionDuration: 0,
     neighbors: [],
   }));
 }

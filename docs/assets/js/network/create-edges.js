@@ -40,6 +40,8 @@ function addEdge(edges, keys, nodes, sourceId, targetId) {
     targetId,
     state: "healthy",
     progress: 0,
+    stateStarted: 0,
+    recoveryStarted: 0,
     stateUntil: 0,
   });
 }
