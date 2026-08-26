@@ -9,6 +9,10 @@
   color: rgba(3, 3, 3, 0.66);
 }
 
+.contact h2 {
+  padding-block-end: 0.75rem;
+}
+
 .contact-links {
   align-items: stretch;
   flex-direction: column;
